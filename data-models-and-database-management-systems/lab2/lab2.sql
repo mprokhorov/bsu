@@ -7,7 +7,7 @@ create table point (
 id serial primary key,
 name varchar(64),
 latitude decimal(8, 6) check (latitude between -90.0 and 90.0),
-longitude decimal(9, 6) check (latitude between -180.0 and 180.0)
+longitude decimal(9, 6) check (longitude between -180.0 and 180.0)
 );
 
 create table tourist (
