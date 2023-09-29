@@ -1,5 +1,3 @@
-import os
-
 path = r'C:\Users\Mikhail\OneDrive\Учёба\ОКМБ\ЛР7\out\ligand_{i}\ligand_{i}_log.txt'
 
 affinities = {}
