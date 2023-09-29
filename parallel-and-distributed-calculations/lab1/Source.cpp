@@ -186,7 +186,7 @@ int main() {
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> distrib(-100, 100);
-    std::vector<int> N_set = { 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 64, 128, 256, 512, 1024, 2048 };
+    std::vector<int> N_set = { 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1100, 1200, 1300, 1400, 1500, 1600, 1700, 1800, 1900, 2000, 2046, 2047, 2048, 2049, 2050 };
     std::vector<int> r_set = { 1, 2, 5, 10, 20, 50, 100, 200, 500 };
 
     std::map<std::string, std::function<void(int*, int*, int*, int)>> dot;
