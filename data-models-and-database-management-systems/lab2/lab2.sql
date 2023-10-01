@@ -73,8 +73,8 @@ insert into point (name, latitude, longitude) values
 ('Опушка', 54.827815, 26.21454);
 
 insert into tourist (full_name, health_info, age, address, phone_number, difficulty_level_id) values
-('Прохоров Михаил', 'Полностью здоров', 20, 'д. Боровляны', '+375293319353', 2),
-('Жук Павел', 'Есть аллергия на сырость', 21, 'г. Минск', '+375291063636', 1),
+('Прохоров Михаил', 'Полностью здоров', 20, 'д. Боровляны', '+375293319353', 3),
+('Жук Павел', 'Есть аллергия на сырость', 21, 'г. Минск', '+375291063636', 2),
 ('Бруцкий Владислав', 'Полностью здоров', 20, 'г. Минск', '+375291011904', 1),
 ('Раткевич Григорий', 'Две недели назад был перелом руки', 20, 'г. Лида', '+375294561904', 1),
 ('Баранов Никита', 'Полностью здоров', 20, 'г. Минск', '+375297890675', 1),
@@ -106,19 +106,50 @@ insert into route_point (route_id, point_id, sequential_number) values
 (2, 7, 2),
 (2, 8, 3),
 (2, 6, 4),
-(2, 3, 5);
+(2, 3, 5),
+(3, 9, 1),
+(3, 7, 2),
+(3, 8, 3),
+(3, 6, 4),
+(3, 3, 5);
 
 insert into trip (route_id) values
 (1),
-(2);
+(2),
+(3);
 
+-- Leader level exception: tourist_level = 1, route_level = 1
 insert into trip_participant (trip_id, tourist_id, is_leader) values
-(1, 1, true),
+(1, 3, true),
 (1, 3, false),
 (1, 4, false),
 (1, 5, false),
 (1, 6, false);
 
+-- No exceptions
+insert into trip_participant (trip_id, tourist_id, is_leader) values
+(1, 2, true),
+(1, 3, false),
+(1, 4, false),
+(1, 5, false),
+(1, 6, false);
+
+insert into trip_point (trip_id, route_point_id, necessary_help, current_state, date) values
+(1, 1, null, 'Удовлетворительное', '2023-09-21 14:00:00'),
+(1, 2, null, 'Удовлетворительное', '2023-09-21 16:20:00'),
+(1, 3, null, 'Отличное', '2023-09-21 17:50:00'),
+(1, 4, null, 'Усталое', '2023-09-21 18:55:00'),
+(1, 5, null, 'Бодрое', '2023-09-21 19:00:00');
+
+-- Leader level exception: tourist_level = 2, route_level = 2
+insert into trip_participant (trip_id, tourist_id, is_leader) values
+(2, 2, true),
+(2, 3, false),
+(2, 7, false),
+(2, 5, false),
+(2, 6, false);
+
+-- No exceptions
 insert into trip_participant (trip_id, tourist_id, is_leader) values
 (2, 1, true),
 (2, 3, false),
@@ -127,13 +158,42 @@ insert into trip_participant (trip_id, tourist_id, is_leader) values
 (2, 6, false);
 
 insert into trip_point (trip_id, route_point_id, necessary_help, current_state, date) values
-(1, 1, null, 'Удовлетворительное', '2023-09-21 14:00:00'),
-(1, 2, null, 'Удовлетворительное', '2023-09-21 16:20:00'),
-(1, 3, null, 'Отличное', '2023-09-21 17:50:00'),
-(1, 4, null, 'Усталое', '2023-09-21 18:55:00'),
-(1, 5, null, 'Бодрое', '2023-09-21 19:00:00'),
 (2, 6, null, 'Удовлетворительное', '2023-09-22 12:20:00'),
 (2, 7, null, 'Измотанное', '2023-09-22 13:55:00'),
 (2, 8, null, 'Хорошее', '2023-09-22 15:50:00'),
 (2, 9, null, 'Весёлое', '2023-09-22 17:12:00'),
 (2, 10, null, 'Удовлетворительное', '2023-09-22 18:34:00');
+
+-- Group member level exception: tourist_level = 1, route_level = 3
+insert into trip_participant (trip_id, tourist_id, is_leader) values
+(3, 1, true),
+(3, 6, false),
+(3, 9, false),
+(3, 2, false);
+
+-- No exceptions
+insert into trip_participant (trip_id, tourist_id, is_leader) values
+(3, 1, true),
+(3, 6, false),
+(3, 3, false),
+(3, 2, false);
+
+-- Tourist amount can't be less than 4
+insert into trip_point (trip_id, route_point_id, necessary_help, current_state, date) values
+(3, 11, null, 'Удовлетворительное', '2023-09-25 12:20:00'),
+(3, 12, null, 'Нормальное', '2023-09-25 13:55:00'),
+(3, 13, null, 'Хорошее', '2023-09-25 14:50:00'),
+(3, 14, null, 'Усталое', '2023-09-25 17:12:00'),
+(3, 15, null, 'Удовлетворительное', '2023-09-25 18:34:00');
+
+-- No exceptions
+insert into trip_participant (trip_id, tourist_id, is_leader) values
+(3, 7, false);
+
+-- No exceptions
+insert into trip_point (trip_id, route_point_id, necessary_help, current_state, date) values
+(3, 11, null, 'Удовлетворительное', '2023-09-25 12:20:00'),
+(3, 12, null, 'Нормальное', '2023-09-25 13:55:00'),
+(3, 13, null, 'Хорошее', '2023-09-25 14:50:00'),
+(3, 14, null, 'Усталое', '2023-09-25 17:12:00'),
+(3, 15, null, 'Удовлетворительное', '2023-09-25 18:34:00');

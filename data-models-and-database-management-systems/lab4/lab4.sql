@@ -10,20 +10,17 @@ create or replace function check_tourist_level() returns trigger as $check_touri
         join route
         on route.id = trip.route_id and trip.id = new.trip_id;
 
-        if new.is_leader and tourist_level < route_level then
-            raise exception 'Leader level exception: tourist_level = (%), route_level = (%)', tourist_level, route_level;
+        if new.is_leader and not (tourist_level > route_level or tourist_level = 3)then
+            raise exception 'Leader level exception: tourist_level = %, route_level = %', tourist_level, route_level;
         end if;
 
-        if not new.is_leader and tourist_level < route_level - 1 then
-            raise exception 'Group member level exception: tourist_level = (%), route_level = (%)', tourist_level, route_level;
+        if not new.is_leader and not (tourist_level = route_level or tourist_level = route_level - 1) then
+            raise exception 'Group member level exception: tourist_level = %, route_level = %', tourist_level, route_level;
         end if;
 
         return new;
     end;
 $check_tourist_level$ language plpgsql;
-
-create or replace trigger check_tourist_level before insert or update on trip_participant
-    for each row execute procedure check_tourist_level();
 
 create or replace function update_tourist_level() returns trigger as $update_tourist_level$
     declare
@@ -46,9 +43,6 @@ create or replace function update_tourist_level() returns trigger as $update_tou
     end;
 $update_tourist_level$ language plpgsql;
 
-create or replace trigger update_tourist_level after insert or update on trip_participant
-    for each row execute procedure update_tourist_level();
-
 create or replace function check_tourists_amount() returns trigger as $check_tourists_amount$
     declare
         tourist_count integer;
@@ -59,7 +53,7 @@ create or replace function check_tourists_amount() returns trigger as $check_tou
         and not trip_participant.is_leader;
 
         if tourist_count < 4 then
-            raise exception 'Tourist amount can''t be less than 5';
+            raise exception 'Tourist amount can''t be less than 4';
         end if;
 
         select count(*) into leader_count from trip_participant
@@ -73,6 +67,12 @@ create or replace function check_tourists_amount() returns trigger as $check_tou
         return new;
     end;
 $check_tourists_amount$ language plpgsql;
+
+create or replace trigger check_tourist_level before insert or update on trip_participant
+    for each row execute procedure check_tourist_level();
+
+create or replace trigger update_tourist_level after insert or update on trip_participant
+    for each row execute procedure update_tourist_level();
 
 create or replace trigger check_tourists_amount before insert or update on trip_point
     for each row execute procedure check_tourists_amount();

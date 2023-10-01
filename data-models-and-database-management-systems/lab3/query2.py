@@ -3,7 +3,7 @@ import asyncpg
 
 
 async def main():
-    conn = await asyncpg.connect(host='localhost', database='postgres')
+    conn = await asyncpg.connect(host='localhost', database='postgres', user='postgres', password='547244')
     route_pairs = await conn.fetch('''
         select distinct r1.name as name_1, r2.name as name_2
         from route_point as rp1
