@@ -3,7 +3,8 @@ import asyncpg
 
 
 async def main():
-    conn = await asyncpg.connect(host='localhost', database='postgres', user='postgres', password='547244')
+    # conn = await asyncpg.connect(host='localhost', database='postgres', user='postgres', password='547244')
+    conn = await asyncpg.connect(host='localhost', database='postgres')
     tourist_name = input('Введите участника: ')
     tourist_level = await conn.fetch('''
         select difficulty_level.name from tourist

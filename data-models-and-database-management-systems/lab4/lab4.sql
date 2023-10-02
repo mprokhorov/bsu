@@ -10,7 +10,7 @@ create or replace function check_tourist_level() returns trigger as $check_touri
         join route
         on route.id = trip.route_id and trip.id = new.trip_id;
 
-        if new.is_leader and not (tourist_level > route_level or tourist_level = 3)then
+        if new.is_leader and not (tourist_level > route_level or tourist_level = 3) then
             raise exception 'Leader level exception: tourist_level = %, route_level = %', tourist_level, route_level;
         end if;
 

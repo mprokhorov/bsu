@@ -3,7 +3,8 @@ import asyncpg
 
 
 async def main():
-    conn = await asyncpg.connect(host='localhost', database='postgres', user='postgres', password='547244')
+    # conn = await asyncpg.connect(host='localhost', database='postgres', user='postgres', password='547244')
+    conn = await asyncpg.connect(host='localhost', database='postgres')
     route_name = input('Введите название маршрута: ')
     tourist_names = await conn.fetch('''
         select tourist.full_name
