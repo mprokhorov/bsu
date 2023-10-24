@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>7f000fec-9a8d-434a-9f85-711232548567</OriginalElement>
+  <nodes>
+    <node x="133.0" y="318.0">7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip</node>
+    <node x="-107.0" y="70.0">7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.point</node>
+    <node x="240.5" y="506.0">7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip_participant</node>
+    <node x="208.25" y="-104.0">7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.difficulty_level</node>
+    <node x="295.0" y="34.0">7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.tourist</node>
+    <node x="-0.5" y="482.0">7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip_point</node>
+    <node x="-87.0" y="294.0">7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.route_point</node>
+    <node x="88.0" y="82.0">7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.route</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.route_point" target="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.point" relationship="REFERENCES">
+      <point x="-50.0" y="-68.0" />
+      <point x="-37.0" y="268.0" />
+      <point x="-19.5" y="268.0" />
+      <point x="0.0" y="68.0" />
+    </edge>
+    <edge source="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip" target="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.route" relationship="REFERENCES">
+      <point x="0.0" y="-44.0" />
+      <point x="199.0" y="268.0" />
+      <point x="181.5" y="268.0" />
+      <point x="0.0" y="56.0" />
+    </edge>
+    <edge source="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip_point" target="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.route_point" relationship="REFERENCES">
+      <point x="-53.25" y="-92.0" />
+      <point x="52.75" y="456.0" />
+      <point x="13.0" y="456.0" />
+      <point x="0.0" y="68.0" />
+    </edge>
+    <edge source="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.tourist" target="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.difficulty_level" relationship="REFERENCES">
+      <point x="0.0" y="-104.0" />
+      <point x="396.0" y="9.0" />
+      <point x="288.75" y="9.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip_point" target="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip" relationship="REFERENCES">
+      <point x="53.25" y="-92.0" />
+      <point x="159.25" y="456.0" />
+      <point x="199.0" y="456.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip_participant" target="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip" relationship="REFERENCES">
+      <point x="-41.75" y="-68.0" />
+      <point x="282.25" y="456.0" />
+      <point x="199.0" y="456.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.trip_participant" target="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.tourist" relationship="REFERENCES">
+      <point x="41.75" y="-68.0" />
+      <point x="365.75" y="456.0" />
+      <point x="396.0" y="456.0" />
+      <point x="0.0" y="104.0" />
+    </edge>
+    <edge source="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.route" target="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.difficulty_level" relationship="REFERENCES">
+      <point x="0.0" y="-56.0" />
+      <point x="181.5" y="9.0" />
+      <point x="288.75" y="9.0" />
+      <point x="0.0" y="44.0" />
+    </edge>
+    <edge source="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.route_point" target="7f000fec-9a8d-434a-9f85-711232548567.TABLE:postgres.public.route" relationship="REFERENCES">
+      <point x="50.0" y="-68.0" />
+      <point x="63.0" y="268.0" />
+      <point x="181.5" y="268.0" />
+      <point x="0.0" y="56.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="195.0" y="281.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Comments</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+
