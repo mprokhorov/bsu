@@ -1,154 +1,157 @@
--- Задание 1: Выдать информацию об дате рождения работника Robert Grishuk.
-SELECT birthdate
-FROM emp
-WHERE empname = 'Robert Grishuk';
+--Выбирите СУБД Oracle для выполнения лабораторной.
+--Cкопируйте файл EDU1.sql в каталог C:\TEMP .
+--Раскройте файл и ознакомтесь со скриптом создания и заполнения таблиц для выполнения лабораторной.
+--Произведите запуск SQLPlus. или PLSQLDeveloper. или другого инструментария Oracle и соеденитесь с БД.  Запустите скрипт EDU1.sql на выполнение.
+--Вставте в эту строку Ваши ФИО, номер подлгруппы. ФИО Прохоров Михаил Андреевич, группа 3б, курс 4.
+--Файл с отчётом о выполнении лабораторной создаётся путём вставки соответсвующего select-предложения после строки с текстом задания.
+--Файл отчёта именуется фамилией студента  в английской транскрипции, с расширением .txt и отправляется в систему edufpmi как ответ к заданию.
+--НЕ ДОПУСКАЕТСЯ ИЗМЕНЕНИЕ ТЕКСТОВ ЗАДАНИЙ, НЕПРАВИЛЬНОЕ ИМЕНОВАНИЕ ФАЙЛА И ОТПРАВКА ВЫПОЛНЕННОЙ РАБОТЫ В ФАЙЛЕ ДРУГОГО ФОРМАТА!!!
+--Тексты заданий:
+--1.	Выдать информацию о периодах (дата приёма,  дата увольнения)  работы сотрудника Vladimir Liss без включения периода с отсутствующей
+--	датой увольнения.
+SELECT startdate, enddate
+FROM career
+JOIN emp ON career.empno = emp.empno
+WHERE emp.empname = 'Vladimir Liss' AND enddate IS NOT NULL;
 
--- Задание 2: Выдать информацию обо всех работниках, родившихся в период с 1.01.1980 по 31.12.1982.
+--2.	Выдать информацию обо всех сотрудниках, родившихся до 01.01.1970.
 SELECT *
 FROM emp
-WHERE birthdate BETWEEN to_date('01-01-1980', 'dd-mm-yyyy') AND to_date('31-12-1982', 'dd-mm-yyyy');
+WHERE birthdate < to_date('01-01-1970', 'dd-mm-yyyy');
 
--- Задание 3: Найти минимальный оклад, предусмотренный для бухгалтера (Accountant).
-SELECT MIN(minsalary) AS min_accountant_salary
+--3.	Найти должности (номер должности, название, минимальный оклад) с минимальными окладами, входящими в интервал [2000,5500].
+SELECT jobno, jobname, minsalary
 FROM job
-WHERE jobname = 'Accountant';
+WHERE minsalary BETWEEN 2000 AND 5500;
 
--- Задание 4: Подсчитать число работников, работавших в компании до 31 мая 2018 года включительно хотя бы один день.
-SELECT COUNT(*) AS num_employees_before_may_2018
-FROM career
-WHERE startdate <= to_date('31-05-2018', 'dd-mm-yyyy');
+--4.	Подсчитать число сотрудников, не работавших в компании ни одного дня в период с 01.04.2014 по 31.08.2014 (включая начальную и конечную дату периода).
+SELECT COUNT(DISTINCT empno) AS employees_count
+FROM emp
+WHERE empno NOT IN (
+    SELECT empno
+    FROM career
+    WHERE (startdate <= TO_DATE('31-08-2014', 'dd-mm-yyyy') AND (enddate IS NULL OR enddate >= TO_DATE('01-04-2014', 'dd-mm-yyyy')))
+);
 
--- Задание 5: Найти максимальные премии, начисленные в 2018, 2019, 2020, 2021, 2022 годах (указать год и максимальную премию в хронологическом порядке).
-SELECT year, MAX(bonvalue) AS max_bonus
+--5.	Найти средние премии, начисленные в  2018, 2020, 2022 годах (указать год и среднюю премию в хронологическом порядке).
+SELECT year, AVG(bonvalue) AS avg_bonus
 FROM bonus
-WHERE year BETWEEN 2018 AND 2022
+WHERE year IN (2018, 2020, 2022)
 GROUP BY year
 ORDER BY year;
 
--- Задание 6: Выдать информацию о кодах отделов, в которых работал работник Robert Grishuk. Если Robert Grishuk работает в настоящее время - отдел также включается в искомый список.
-SELECT DISTINCT deptid
+--6.	Выдать информацию о количестве различных отделов,  в которых работал сотрудник Ivan Dudin. Если Ivan Dudin работает в настоящее время - отдел также включается.
+SELECT COUNT(DISTINCT career.deptid) AS dept_count
 FROM career
-WHERE empno = (SELECT empno FROM emp WHERE empname = 'Robert Grishuk')
-   OR (empno IS NULL AND enddate IS NULL);
+JOIN emp ON emp.empno = career.empno
+WHERE emp.empname = 'Ivan Dudin';
 
--- Задание 7: Выдать информацию о названиях должностей, на которых работали работники Vera Rovdo и Dave Hollander. Если один из них или оба работают в настоящее время - должность также включается в искомый список. Должность выдаётся вместе с ФИО (empname) работника.
-SELECT e.empname, j.jobname
-FROM emp e
-JOIN career c ON e.empno = c.empno
-JOIN job j ON c.jobno = j.jobno
-WHERE e.empname IN ('Vera Rovdo', 'Dave Hollander')
-   OR (e.empname IS NULL AND enddate IS NULL);
+--7.	Выдать информацию о кодах, названиях и адресах различных отделов (отделы ,имеющие одинаковое название, но разные адреса также считаются различными),
+--	в которых работали сотрудники Richard Martin и Nina Tihanovich. Если один из них или оба  работают в настоящее время -
+--	отдел также включается в искомый список. Код, название и адрес отдела выдаётся вместе с ФИО (empname) работника.
+SELECT DISTINCT dept.deptid, dept.deptname, dept.deptaddress, emp.empname
+FROM emp
+JOIN career ON emp.empno = career.empno
+JOIN dept ON career.deptid = dept.deptid
+WHERE emp.empname IN ('Richard Martin', 'Nina Tihanovich');
 
--- Задание 8: Найти фамилии, коды должностей, периоды времени (даты приема и даты увольнения) для всех инженеров (Engineer) и программистов (Programmer), работавших или работающих в компании. Если работник работает в настоящий момент, то дата увольнения должна выдаваться как Null.
-SELECT e.empname, j.jobno, j.jobname, c.startdate, c.enddate
-FROM emp e
-JOIN career c ON e.empno = c.empno
-JOIN job j ON c.jobno = j.jobno
-WHERE j.jobname IN ('Engineer', 'Programmer')
-   OR (e.empname IS NULL AND enddate IS NULL);
+-- 8.	Найти фамилии, названия должностей, периоды времени (даты приема и даты увольнения) для всех финансовых (Financial Director) и исполнительных Executive Director) директоров,
+--	 работавших или работающих в компании. Если сотрудник работает в настоящий момент, то дата увольнения должна отсутсвовать.
+SELECT emp.empname, job.jobname, career.startdate, career.enddate
+FROM emp
+JOIN career ON emp.empno = career.empno
+JOIN job ON career.jobno = job.jobno
+WHERE job.jobname IN ('Financial Director', 'Executive Director');
 
--- Задание 9: Найти фамилии, названия должностей, периоды времени (даты приема и даты увольнения) для бухгалтеров (Accountant) и продавцов (Salesman), работавших или работающих в компании. Если работник работает в настоящий момент, то дата увольнения отсутствует.
-SELECT e.empname, j.jobname, c.startdate, c.enddate
-FROM emp e
-JOIN career c ON e.empno = c.empno
-JOIN job j ON c.jobno = j.jobno
-WHERE j.jobname IN ('Accountant', 'Salesman')
-   OR (e.empname IS NULL AND enddate IS NULL);
+-- 9.	Найти фамилии, коды должностей, периоды времени (даты приема и даты увольнения) для менеджеров (Manager) и бухгалтеров (Accountant),  работавших или работающих
+--	в компании. Если сотрудник работает в настоящий момент, то дата увольнения отсутствует.
+SELECT emp.empname, job.jobno, career.startdate, career.enddate
+FROM emp
+JOIN career ON emp.empno = career.empno
+JOIN job ON career.jobno = job.jobno
+WHERE job.jobname IN ('Manager', 'Accountant');
 
--- Задание 10: Найти количество различных работников, работавших в отделе B02 хотя бы один день в период с 01.01.2017 по настоящий момент.
-SELECT COUNT(DISTINCT e.empno) AS num_employees_in_B02
-FROM emp e
-JOIN career c ON e.empno = c.empno
-WHERE c.deptid = 'B02' AND c.startdate <= CURRENT_DATE;
+-- 10.	Найти количество различных сотрудников, работавших в отделе U03 хотя бы один день в период до 01.01.2014 и после 31.12.2022.
+SELECT COUNT(DISTINCT emp.empno)
+FROM emp
+JOIN career ON emp.empno = career.empno
+WHERE career.deptid = 'U03' AND ((career.startdate < to_date('01-01-2014', 'dd-mm-yyyy') AND career.enddate > to_date('01-01-2014', 'dd-mm-yyyy'))
+                                     OR (career.startdate < to_date('31-12-2022', 'dd-mm-yyyy') AND career.enddate > to_date('31-12-2022', 'dd-mm-yyyy')));
+-- WHERE career.deptid = 'U03' AND ((career.startdate < to_date('01-01-2014', 'dd-mm-yyyy') )
+--                                      OR (career.startdate < to_date('31-12-2022', 'dd-mm-yyyy') AND (career.enddate > to_date('31-12-2022', 'dd-mm-yyyy') OR career.enddate IS NULL)));
 
--- Задание 11: Найти фамилии этих работников.
-SELECT DISTINCT e.empname
-FROM emp e
-JOIN career c ON e.empno = c.empno
-WHERE c.deptid = 'B02' AND c.startdate <= CURRENT_DATE;
+-- 11.	Найти фамилии и даты рождения этих сотрудников.
+SELECT empname, birthdate
+FROM emp
+JOIN career ON emp.empno = career.empno
+WHERE career.deptid = 'U03' AND ((career.startdate < to_date('01-01-2014', 'dd-mm-yyyy') AND career.enddate > to_date('01-01-2014', 'dd-mm-yyyy'))
+                                     OR (career.startdate < to_date('31-12-2022', 'dd-mm-yyyy') AND career.enddate > to_date('31-12-2022', 'dd-mm-yyyy')));
+-- WHERE career.deptid = 'U03' AND ((career.startdate < to_date('01-01-2014', 'dd-mm-yyyy') )
+--                                      OR (career.startdate < to_date('31-12-2022', 'dd-mm-yyyy') AND (career.enddate > to_date('31-12-2022', 'dd-mm-yyyy') OR career.enddate IS NULL)));
 
--- Задание 12: Найти номера и названия отделов, в которых в период с 01.01.2019 по 31.12.2020 работало не более пяти работников.
-SELECT c.deptid, d.deptname
-FROM career c
-JOIN dept d ON c.deptid = d.deptid
-WHERE c.startdate BETWEEN to_date('01-01-2019', 'dd-mm-yyyy') AND to_date('31-12-2020', 'dd-mm-yyyy')
-GROUP BY c.deptid, d.deptname
-HAVING COUNT(DISTINCT c.empno) <= 5;
+--12.	Найти номера и названия отделов, в которых в период до 01.01.2014 и после 31.12.2022  работал хотя бы один сотрудник.
+SELECT DISTINCT dept.deptid, dept.deptname
+FROM dept
+JOIN career ON dept.deptid = career.deptid
+WHERE ((career.startdate < to_date('01-01-2014', 'dd-mm-yyyy') AND career.enddate > to_date('01-01-2014', 'dd-mm-yyyy'))
+                                     OR (career.startdate < to_date('31-12-2022', 'dd-mm-yyyy') AND career.enddate > to_date('31-12-2022', 'dd-mm-yyyy')));
+-- WHERE career.deptid = 'U03' AND ((career.startdate < to_date('01-01-2014', 'dd-mm-yyyy') )
+--                                      OR (career.startdate < to_date('31-12-2022', 'dd-mm-yyyy') AND (career.enddate > to_date('31-12-2022', 'dd-mm-yyyy') OR career.enddate IS NULL)));
 
--- Задание 13: Найти информацию об отделах (номер, название), всем работникам которых не начислялась премия в период с 01.01.2019 по 31.12.2019.
-SELECT c.deptid, d.deptname
-FROM career c
-JOIN dept d ON c.deptid = d.deptid
+--13.	Найти информацию об отделах (номер, название), всем сотрудникам которых не начислялась премия в период с 01.01.2021 по  31.12.2021.
+SELECT dept.deptid, dept.deptname
+FROM dept
 WHERE NOT EXISTS (
     SELECT 1
-    FROM bonus b
-    WHERE b.empno = c.empno
-      AND b.month BETWEEN 1 AND 12
-      AND b.year = 2019
-);
+    FROM career
+    JOIN bonus ON career.empno = bonus.empno
+    WHERE career.deptid = dept.deptid AND ((bonus.month BETWEEN 1 AND 12 AND bonus.year = 2021)));
 
--- Задание 14: Найти количество работников, никогда не работавших и не работающих в исследовательском (Research) отделе, но работавших или работающих в отделе поддержки (Support).
-SELECT COUNT(DISTINCT e.empno) AS num_support_not_research
-FROM emp e
-JOIN career c ON e.empno = c.empno
-WHERE c.deptid = 'Support'
-   AND e.empno NOT IN (
-        SELECT c.empno
-        FROM career c
-        WHERE c.deptid = 'Research'
-    );
 
--- Задание 15: Найти коды и фамилии работников, работавших в двух и более отделах, но не работающих в настоящее время в компании.
-SELECT e.empno, e.empname
-FROM emp e
-JOIN career c ON e.empno = c.empno
-WHERE c.enddate IS NOT NULL
-   AND e.empno IN (
-        SELECT empno
-        FROM career
-        GROUP BY empno
-        HAVING COUNT(DISTINCT deptid) >= 2
-    );
+--14.	Найти количество сотрудников, работавших или работающих в исследовательском  (Research) отделе, но не работавших и не работающих в отделе поддержки (Support).
+SELECT COUNT(DISTINCT empno)
+FROM career
+JOIN dept ON career.deptid = dept.deptid
+WHERE (dept.deptname = 'Research') AND dept.deptid NOT IN (SELECT deptid FROM dept WHERE deptname = 'Support');
 
--- Задание 16: Найти коды и фамилии работников, работавших в двух и более должностях, но не работающих в настоящее время в компании.
-SELECT e.empno, e.empname
-FROM emp e
-JOIN career c ON e.empno = c.empno
-WHERE c.enddate IS NOT NULL
-   AND e.empno IN (
-        SELECT empno
-        FROM career
-        GROUP BY empno
-        HAVING COUNT(DISTINCT jobno) >= 2
-    );
+-- 15	Найти коды и фамилии сотрудников, работавших ровно в двух отделах (естественно в разные периоды). Период без увольнения (сотрудник работает) также включается.
+SELECT emp.empno, emp.empname
+FROM emp
+JOIN career ON emp.empno = career.empno
+GROUP BY emp.empno
+HAVING COUNT(DISTINCT career.deptid) = 2;
 
--- Задание 17: Найти коды и фамилии работников, суммарный стаж работы которых в компании на текущий момент не более 8 лет.
-SELECT e.empno, e.empname
-FROM emp e
-JOIN career c ON e.empno = c.empno
-GROUP BY e.empno, e.empname
-HAVING COALESCE(SUM(EXTRACT(YEAR FROM c.enddate - c.startdate)), 0) <= 8;
+-- 16	Найти коды и фамилии сотрудников, работавших ровно на двух должностях (естественно в разные периоды), но не работающих в настоящее время в компании.
+SELECT c1.empno, e.empname
+FROM career c1
+INNER JOIN emp e ON c1.empno = e.empno
+WHERE (
+    SELECT COUNT(DISTINCT c2.jobno)
+    FROM career c2
+    WHERE c2.empno = c1.empno
+) = 2
+AND c1.enddate IS NOT NULL;
 
--- Задание 18: Найти всех работников (коды и фамилии), увольнявшихся хотя бы один раз.
-SELECT e.empno, e.empname
-FROM emp e
-JOIN career c ON e.empno = c.empno
-WHERE c.enddate IS NOT NULL;
+-- 17	Найти коды  и фамилии сотрудников, суммарный стаж работы которых в компании начиная с 01.01.2014 до настоящего времени не менее 6-и лет.
+SELECT emp.empno, emp.empname, SUM(CASE WHEN career.enddate IS NOT NULL THEN career.enddate - career.startdate ELSE CURRENT_DATE - career.startdate END)
+FROM emp
+JOIN career ON emp.empno = career.empno
+GROUP BY emp.empno, emp.empname
+HAVING SUM(CASE WHEN career.enddate IS NOT NULL THEN career.enddate - career.startdate ELSE CURRENT_DATE - career.startdate END) >= 6 * 365;
 
--- Задание 19: Найти средние премии, начисленные за период в три 2018, 2019, 2020 года, за период в три 2019, 2020, 2021 года и за период в три 2020, 2021, 2022 года, в разрезе работников (т.е. для работников, имевших начисления хотя бы в одном месяце трёхгодичного периода). Вывести код, имя и фамилию работника, период, среднюю премию.
-SELECT b.empno, e.empname,
-       CONCAT(b.year - 2, '-', b.year) AS period,
-       AVG(b.bonvalue) AS avg_bonus
-FROM bonus b
-JOIN emp e ON b.empno = e.empno
-WHERE (b.year = 2018 AND b.month BETWEEN 1 AND 3)
-   OR (b.year = 2019 AND b.month BETWEEN 1 AND 3)
-   OR (b.year = 2020 AND b.month BETWEEN 1 AND 3)
-GROUP BY b.empno, e.empname, period;
+-- 18	Найти всех сотрудников (коды и фамилии), увольнявшихся ровно три раза из компании.
+SELECT emp.empno, emp.empname
+FROM emp
+JOIN career ON emp.empno = career.empno AND career.enddate IS NOT NULL
+GROUP BY emp.empno, emp.empname
+HAVING COUNT(career.enddate) = 3;
 
--- Задание 20: Найти отделы (id, название, адрес), в которых есть начисления премий в апреле и марте 2021 года.
-SELECT d.deptid, d.deptname, d.deptaddress
-FROM dept d
-JOIN career c ON d.deptid = c.deptid
-JOIN bonus b ON c.empno = b.empno
-WHERE b.year = 2021 AND b.month IN (3, 4);
+--19.	Найти суммарные премии, начисленные за период в три 2018, 2019, 2020 года и за период в три 2020, 2021, 2022 года, в разрезе сотрудников
+--	(т.е. для сотрудников, имевших начисления хотя бы в одном месяце трёхгодичного периода). Вывести номер, имя и фимилию сотрудника, период, суммарную премию.
+
+--20.	Найти отделы (id, название, адрес), в которых есть начисления премий в феврале или сентябре  2021 года.
+SELECT DISTINCT dept.deptid, dept.deptname, dept.deptaddress
+FROM bonus
+JOIN career ON bonus.empno = career.empno
+JOIN dept ON career.deptid = dept.deptid
+WHERE (bonus.month = 2 OR bonus.month = 9) AND bonus.year = 2021;
