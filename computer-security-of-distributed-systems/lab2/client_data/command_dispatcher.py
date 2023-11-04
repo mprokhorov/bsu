@@ -61,7 +61,7 @@ class CommandsDispatcher(object):
 
         if self.callBack:
             self.callBack(error, result)
-        input('Нажмите enter чтобы продолжить!')
+        input('Нажмите enter чтобы продолжить!\n')
 
     def closeConnection(self):
         self.login = None
@@ -159,7 +159,7 @@ class CommandsDispatcher(object):
         filenameT = input("Введите имя конечного файла: ")
         if not os.path.exists(filenameF):
             print('Такого файла не существует!')
-            input('Нажмите enter чтобы продолжить!')
+            input('Нажмите enter чтобы продолжить!\n')
             self.state = ClientStates.MAIN_FUNCTIONS
             return None
 
