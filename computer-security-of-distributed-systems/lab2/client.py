@@ -7,7 +7,7 @@ from client_data.command_dispatcher import CommandsDispatcher
 async def main():
     try:
         clientSocket = socket.socket()
-        clientSocket.connect(('127.0.0.1', 8000))
+        clientSocket.connect(('10.160.46.207', 8000))
         commandProcessor = CommandsDispatcher()
         while True:
             data = commandProcessor.processRequest()
