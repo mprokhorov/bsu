@@ -1,22 +1,18 @@
-#!/usr/bin/env python3
-
 import collections
 import random
 
-EllipticCurve = collections.namedtuple('EllipticCurve', 'name p a b g n h')
+EllipticCurve = collections.namedtuple('EllipticCurve', 'p a b g n h')
 
 curve = EllipticCurve(
-    'secp256k1',
     # Field characteristic.
-    p=0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f,
+    p=59,
     # Curve coefficients.
-    a=0,
-    b=7,
+    a=3,
+    b=3,
     # Base point.
-    g=(0x79be667ef9dcbbac55a06295ce870b07029bfcdb2dce28d959f2815b16f81798,
-       0x483ada7726a3c4655da4fbfc0e1108a8fd17b448a68554199c47d08ffb10d4b8),
+    g=(6, 1),
     # Subgroup order.
-    n=0xfffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141,
+    n=73,
     # Subgroup cofactor.
     h=1,
 )
@@ -160,8 +156,6 @@ def make_keypair():
 
     return private_key, public_key
 
-
-print('Curve:', curve.name)
 
 # Alice generates her own keypair.
 alice_private_key, alice_public_key = make_keypair()

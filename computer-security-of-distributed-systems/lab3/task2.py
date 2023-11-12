@@ -1,27 +1,15 @@
-from sympy import Symbol, Eq, solve
+M = 59
+a = 3
+b = 3
 
-def generate_elliptic_group_elements(a, b, M):
-    elements = []
+assert (4 * a ** 3 + 27 * b ** 2) % M != 0
 
-    for x in range(M):
-        # Вычисление y по уравнению эллиптической кривой: y^2 = x^3 + ax + b
-        y_squared = (x**3 + a*x + b) % M
-        y = None
+EM = []
 
-        # Поиск корней квадратного уравнения
-        for candidate_y in range(M):
-            if (candidate_y**2) % M == y_squared:
-                y = candidate_y
-                break
+for x in range(M):
+    for y in range(M):
+        if (y ** 2 - x ** 3 - a * x - b) % M == 0:
+            EM.append((x, y))
 
-        # Если найден корень, добавить точку в группу
-        if y is not None:
-            elements.append((x, y))
-
-    return elements
-
-# Пример использования с параметрами из предыдущего скрипта
-if parameters:
-    a_value, b_value = parameters[0]
-    elements = generate_elliptic_group_elements(a_value, b_value, M_value)
-    print(f"Elements of EM({a_value}, {b_value}) with M={M_value}: {elements}")
+print(f'Elements of E{M}({a}, {b}): ' + ', '.join(map(str, EM)))
+print(f'Order of E{M}({a}, {b}): {len(EM) + 1}')
