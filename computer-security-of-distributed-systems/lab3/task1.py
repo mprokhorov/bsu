@@ -1,32 +1,25 @@
 M = 59
 
-
-def is_prime(n):
-    for i in range(2, int(n / 2)):
-        if (n % i) == 0:
-            return False
-    return True
-
-
-EM_groups = []
+elliptic_groups = []
 
 for a in range(M):
     for b in range(M):
         if (4 * a ** 3 + 27 * b ** 2) % M == 0:
             continue
 
-        EM_order = 1
+        elliptic_group_order = 1
 
         for x in range(M):
             for y in range(M):
                 if (y ** 2 - x ** 3 - a * x - b) % M == 0:
-                    EM_order += 1
+                    elliptic_group_order += 1
 
-        EM_groups.append((a, b, EM_order))
+        elliptic_groups.append((a, b, elliptic_group_order))
 
-EM_orders = set()
+elliptic_group_orders = set()
 
-for EM_order in EM_groups:
-    EM_orders.add(EM_order[2])
+for elliptic_group_order in elliptic_groups:
+    elliptic_group_orders.add(elliptic_group_order[2])
 
-print('\n'.join(map(str, [EM_group for EM_group in EM_groups if EM_group[2] == 73])))
+elliptic_groups.sort(key=lambda eg: (eg[2], eg[0], eg[1]))
+print('\n'.join(map(str, elliptic_groups)))
