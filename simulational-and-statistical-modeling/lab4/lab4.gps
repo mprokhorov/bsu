@@ -1,0 +1,48 @@
+theta 	EQU 10
+alpha 	EQU 3
+delta 	EQU 1
+mu 	EQU 25
+period 	EQU 3600
+
+	GENERATE	      (GAMMA(1,0,theta,3))  									;  generate transaction in Erlang's stream of 2 order
+	QUEUE ROBOTQUEUE												;  create queue to robot (to obtain statistics only)
+	SEIZE ROBOT													;  lock robot
+	DEPART ROBOTQUEUE												;  remove transaction from queue
+	ADVANCE	      alpha,delta											;  lock robot on t from (a +- delta) seconds
+	RELEASE ROBOT													;  release robot
+	
+Cmp12	TEST L Q$CHQ1,Q$CHQ2,Cmp23less
+	TRANSFER ,Cmp13
+Cmp23less TEST L Q$CHQ3,Q$CHQ2,GoC2
+
+Cmp13	TEST L Q$CHQ1,Q$CHQ3,Cmp32less
+	TRANSFER ,ElseGo1
+Cmp32less TEST L Q$CHQ2,Q$CHQ3,GoC3	
+
+ElseGo1	TRANSFER ,GoC1
+
+GoC1	QUEUE CHQ1												;  create queue to channel (to obtain statistics only)
+	SEIZE CHANNEL1												;  lock one free channel or wait
+	DEPART CHQ1												;  remove transaction from queue
+	ADVANCE	      (EXPONENTIAL(1,0,mu))									;  lock channel on exponential(mu) seconds
+	RELEASE CHANNEL1											;  release channel
+	TRANSFER 	      ,Finish
+
+GoC2	QUEUE CHQ2												;  create queue to channel (to obtain statistics only)
+	SEIZE CHANNEL2												;  lock one free channel or wait
+	DEPART CHQ2												;  remove transaction from queue
+	ADVANCE	      (EXPONENTIAL(1,0,mu))									;  lock channel on exponential(mu) seconds
+	RELEASE CHANNEL2											;  release channel
+	TRANSFER 	      ,Finish
+
+GoC3	QUEUE CHQ3												;  create queue to channel (to obtain statistics only)
+	SEIZE CHANNEL3												;  lock one free channel or wait
+	DEPART CHQ3												;  remove transaction from queue
+	ADVANCE	      (EXPONENTIAL(1,0,mu))									;  lock channel on exponential(mu) seconds
+	RELEASE CHANNEL3											;  release channel
+	TRANSFER 	      ,Finish
+
+Finish	TERMINATE	      0											;  remove transaction from queue
+	GENERATE        period                               							;  analysis period (1 h = 3600 sec)
+	TERMINATE       1                                  							;  minus one second
+	START           1                                  							;  start model

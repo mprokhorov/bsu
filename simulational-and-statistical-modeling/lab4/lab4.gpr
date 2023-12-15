@@ -1,0 +1,87 @@
+              GPSS World Simulation Report - lab6_var11_z21_ver2.11.1
+
+
+                   Saturday, December 16, 2023 00:12:42  
+
+           START TIME           END TIME  BLOCKS  FACILITIES  STORAGES
+                0.000           3600.000    34        3          0
+
+
+              NAME                       VALUE  
+          ALPHA                           3.000
+          CHANNEL1                    UNSPECIFIED
+          CHANNEL2                    10010.000
+          CHANNEL3                    10011.000
+          CHQ1                        10007.000
+          CHQ2                        10008.000
+          CHQ3                        10009.000
+          CMP12                           7.000
+          CMP13                          10.000
+          CMP23LESS                       9.000
+          CMP32LESS                      12.000
+          DELTA                           1.000
+          ELSEGO1                        13.000
+          FINISH                         32.000
+          GOC1                           14.000
+          GOC2                           20.000
+          GOC3                           26.000
+          MU                             25.000
+          PERIOD                       3600.000
+          ROBOT                       10006.000
+          ROBOTQUEUE                  10005.000
+          THETA                          10.000
+
+
+ LABEL              LOC  BLOCK TYPE     ENTRY COUNT CURRENT COUNT RETRY
+                    1    GENERATE           120             0       0
+                    2    QUEUE              120             0       0
+                    3    SEIZE              120             0       0
+                    4    DEPART             120             0       0
+                    5    ADVANCE            120             0       0
+                    6    RELEASE            120             0       0
+CMP12               7    TEST               120             0       0
+                    8    TRANSFER            28             0       0
+CMP23LESS           9    TEST                92             0       0
+CMP13              10    TEST                28             0       0
+                   11    TRANSFER             0             0       0
+CMP32LESS          12    TEST                28             0       0
+ELSEGO1            13    TRANSFER             0             0       0
+GOC1               14    QUEUE                0             0       0
+                   15    SEIZE                0             0       0
+                   16    DEPART               0             0       0
+                   17    ADVANCE              0             0       0
+                   18    RELEASE              0             0       0
+                   19    TRANSFER             0             0       0
+GOC2               20    QUEUE               92             0       0
+                   21    SEIZE               92             0       0
+                   22    DEPART              92             0       0
+                   23    ADVANCE             92             0       0
+                   24    RELEASE             92             0       0
+                   25    TRANSFER            92             0       0
+GOC3               26    QUEUE               28             0       0
+                   27    SEIZE               28             0       0
+                   28    DEPART              28             0       0
+                   29    ADVANCE             28             0       0
+                   30    RELEASE             28             0       0
+                   31    TRANSFER            28             0       0
+FINISH             32    TERMINATE          120             0       0
+                   33    GENERATE             1             0       0
+                   34    TERMINATE            1             0       0
+
+
+FACILITY         ENTRIES  UTIL.   AVE. TIME AVAIL. OWNER PEND INTER RETRY DELAY
+ ROBOT              120    0.098       2.934  1        0    0    0     0      0
+ CHANNEL2            92    0.706      27.629  1        0    0    0     0      0
+ CHANNEL3            28    0.199      25.524  1        0    0    0     0      0
+
+
+QUEUE              MAX CONT. ENTRY ENTRY(0) AVE.CONT. AVE.TIME   AVE.(-0) RETRY
+ ROBOTQUEUE          1    0    120    119     0.000      0.011      1.379   0
+ CHQ1                0    0      0      0     0.000      0.000      0.000   0
+ CHQ2                1    0     92     49     0.346     13.528     28.943   0
+ CHQ3                1    0     28     21     0.037      4.753     19.013   0
+
+
+FEC XN   PRI         BDT      ASSEM  CURRENT  NEXT  PARAMETER    VALUE
+   122    0        3625.043    122      0      1
+   123    0        7200.000    123      0     33
