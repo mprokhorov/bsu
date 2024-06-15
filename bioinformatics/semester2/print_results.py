@@ -1,4 +1,4 @@
-path = r'C:\Users\Mikhail\Downloads\ligand_{i}_out\output.txt'
+path = r'ligand_{i}_out\output.txt'
 
 for i in [2, 8, 13, 14, 16]:
     file = open(path.format(i=i), 'r')

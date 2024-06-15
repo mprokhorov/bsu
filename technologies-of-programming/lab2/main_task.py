@@ -1,4 +1,4 @@
-from art import *
+from art import text2art
 
 print('https://edufpmi.bsu.by/mod/assign/view.php?id=25601')
 print('https://www.jetbrains.com/ru-ru/pycharm/')

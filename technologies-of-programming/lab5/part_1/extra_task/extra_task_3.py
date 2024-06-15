@@ -1,4 +1,4 @@
-from art import *
+from art import text2art
 
 
 def guess_the_number(min_num, max_num, max_attempts):

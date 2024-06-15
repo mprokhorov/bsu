@@ -1,5 +1,5 @@
 import random
-from art import *
+from art import text2art
 
 
 def guess_the_number(min_num_, max_num_, max_attempts):
@@ -41,5 +41,4 @@ except AssertionError:
     min_num = 1
     max_num = 100
 
-# Пример использования функции guess_the_number()
 guess_the_number(1, 100, 10)

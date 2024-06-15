@@ -105,13 +105,10 @@ def question10(n):
 
 while True:
     try:
-        # Предложение выбрать номер функции
         choice = int(input("Выберите номер функции (1-10): "))
-        # Проверка, что выбор в диапазоне от 1 до 10
         if choice < 1 or choice > 10:
             print("Некорректный выбор, попробуйте снова.")
             continue
-        # Выбор функции в зависимости от выбранного номера
         if choice == 1:
             n = int(input("Введите натуральное число: "))
             result = question1(n)
@@ -164,7 +161,6 @@ while True:
             n = int(input("Введите порядковый номер элемента: "))
             result = question10(n)
             print("Значение элемента:", result)
-        # Выход из цикла
         break
     except ValueError:
         print("Некорректный ввод, попробуйте снова.")
